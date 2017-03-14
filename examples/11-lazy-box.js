@@ -12,7 +12,10 @@ const LazyBox = g => ({
   map: f => LazyBox( _ => f(g()) ),
 
   // compose and evaluate only here!
-  fold: f => f(g())
+  fold: f => 
+  { 
+    return f(g()); 
+  }
 })
 
 

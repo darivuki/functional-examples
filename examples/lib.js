@@ -3,6 +3,8 @@ const Box = x => (
     // b2 must be a boxed function Box(f)
     ap: b2 => b2.map(x),
 
+    apFold: b2 => b2.fold(x),
+
     // f must be from any type a to any type b
     map: f => Box(f(x)),
 
@@ -13,6 +15,16 @@ const Box = x => (
   }
 )
 
+const compose = function() {
+    var funcs = arguments;
+    return function() {
+        var args = arguments;
+        for (var i = funcs.length; i --> 0;) {
+            args = [funcs[i].apply(this, args)];
+        }
+        return args[0];
+    };
+};
 
 const Right = x => (
   {
@@ -43,6 +55,8 @@ const Left = x => (
     inspect: () => `Left(${x})`
   }
 )
+
+
 
 
 // ensure null will always go Left
