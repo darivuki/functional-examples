@@ -12,11 +12,24 @@ const LazyBox = g => ({
   map: f => LazyBox( _ => f(g()) ),
 
   // compose and evaluate only here!
-  fold: f => 
-  { 
-    return f(g()); 
-  }
+  fold: f => f(g()),
+  foldf: x => g(x)
 })
+
+const Fn = g => 
+({
+  contramap: f => Fn(x => g(f(x))),
+  dimap: (f, h) => Fn(x => h(g(f(x)))),
+  map: f => Fn(x => f(g(x))),
+  concat: ({fold: h}) => Fn(x => g(x).concat(h(x))),
+  fold: g
+});
+
+const r = Fn(x => x.reverse())
+          .dimap(x => x.split(''), x => x.join(''))
+          .fold('hello')
+console.log(r) // olleh
+
 
 
 const nextCharForNumberString = str =>
